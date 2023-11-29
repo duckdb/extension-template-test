@@ -19,8 +19,10 @@ else
   ext="/tmp/extension/$1.duckdb_extension"
 fi
 
-echo $ext
+ls /tmp/extension/*
 
+echo $4
+echo $ext
 
 script_dir="$(dirname "$(readlink -f "$0")")"
 
