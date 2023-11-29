@@ -15,7 +15,7 @@ set -e
 
 echo "0"
 
-if [[ $4 == 'wasm*' ]]; then
+if [[ '$4' == 'wasm*' ]]; then
   echo "good"
   ext="/tmp/extension/$1.duckdb_extension.wasm"
 else
@@ -25,7 +25,7 @@ fi
 
 echo "1"
 
-if [[ $4 == "wasm*" ]]; then
+if [[ "$4" == "wasm*" ]]; then
   echo "good"
 else
   echo "not good"
