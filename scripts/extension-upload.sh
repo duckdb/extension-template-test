@@ -13,27 +13,12 @@
 
 set -e
 
-echo "0"
-
-if [[ '$4' == 'wasm*' ]]; then
-  echo "good"
+if [[ '$4' == wasm* ]]; then
   ext="/tmp/extension/$1.duckdb_extension.wasm"
 else
-  echo "not good"
   ext="/tmp/extension/$1.duckdb_extension"
 fi
 
-echo "1"
-
-if [[ "$4" == "wasm*" ]]; then
-  echo "good"
-else
-  echo "not good"
-fi
-
-ls /tmp/extension/*
-
-echo $4
 echo $ext
 
 script_dir="$(dirname "$(readlink -f "$0")")"
@@ -41,7 +26,7 @@ script_dir="$(dirname "$(readlink -f "$0")")"
 # calculate SHA256 hash of extension binary
 cat $ext > $ext.append
 
-if [[ $4 == 'wasm*' ]]; then
+if [[ $4 == wasm* ]]; then
   # 0 for custom section
   # 113 in hex = 275 in decimal, total lenght of what follows (1 + 16 + 2 + 256)
   # [1(continuation) + 0010011(payload) = \x93, 0(continuation) + 10(payload) = \x02]
@@ -72,7 +57,7 @@ truncate -s 256 $ext.sign
 cat $ext.sign >> $ext.append
 
 # compress extension binary
-if [[ $4 == "wasm_*" ]]; then
+if [[ $4 == wasm_* ]]; then
   gzip < $ext.append > "$ext.compressed"
 else
   brotli < $ext.append > "$ext.compressed"
@@ -88,7 +73,7 @@ fi
 
 # upload versioned version
 if [[ $7 = 'true' ]]; then
-  if [[ $4 == 'wasm*' ]]; then
+  if [[ $4 == wasm* ]]; then
     aws s3 cp $ext.compressed s3://$5/duckdb-wasm/$1/$2/duckdb-wasm/$3/$4/$1.duckdb_extension.wasm --acl public-read --content-encoding br --content-type="application/wasm"
   else
     aws s3 cp $ext.compressed s3://$5/$1/$2/$3/$4/$1.duckdb_extension.gz --acl public-read
@@ -97,7 +82,7 @@ fi
 
 # upload to latest version
 if [[ $6 = 'true' ]]; then
-  if [[ $4 == 'wasm*' ]]; then
+  if [[ $4 == wasm* ]]; then
     aws s3 cp $ext.compressed s3://$5/duckdb-wasm/$3/$4/$1.duckdb_extension.wasm --acl public-read --content-encoding br --content-type="application/wasm"
   else
     aws s3 cp $ext.compressed s3://$5/$3/$4/$1.duckdb_extension.gz --acl public-read
