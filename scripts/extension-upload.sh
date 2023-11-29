@@ -13,7 +13,7 @@
 
 set -e
 
-if [[ '$4' == wasm* ]]; then
+if [[ $4 == wasm* ]]; then
   ext="/tmp/extension/$1.duckdb_extension.wasm"
 else
   ext="/tmp/extension/$1.duckdb_extension"
